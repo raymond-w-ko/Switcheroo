@@ -61,6 +61,7 @@ namespace Switcheroo
         private AltTabHook _altTabHook;
         private SystemWindow _foregroundWindow;
         private bool _altTabAutoSwitch;
+        private bool _filterWindowMode;
 
         public MainWindow()
         {
@@ -108,6 +109,10 @@ namespace Switcheroo
                     tb.Text = "";
                     tb.IsEnabled = true;
                     tb.Focus();
+                }
+                else if (args.Key == Key.F && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+                {
+                    _filterWindowMode = true;
                 }
             };
 
@@ -361,6 +366,7 @@ namespace Switcheroo
             }
 
             _altTabAutoSwitch = false;
+            _filterWindowMode = false;
             Opacity = 0;
             Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.Input);
         }
@@ -557,6 +563,20 @@ namespace Switcheroo
             }
 
             var query = tb.Text;
+
+            if (!_filterWindowMode) {
+
+                switch (query) {
+                    case "": return;
+                    case "r": lb.SelectedIndex = 0; break;
+                    case "e": lb.SelectedIndex = 1; break;
+                    case "w": lb.SelectedIndex = 2; break;
+                    case "q": lb.SelectedIndex = 3; break;
+                }
+
+                Switch();
+                return;
+            }
 
             var context = new WindowFilterContext<AppWindowViewModel>
             {
