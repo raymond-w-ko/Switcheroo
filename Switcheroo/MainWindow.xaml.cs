@@ -46,6 +46,9 @@ namespace Switcheroo
 {
     public partial class MainWindow : Window
     {
+        private static readonly string[] QuickKeys = { "r", "e", "w", "q", "f", "d", "s", "a" };
+        private Dictionary<string, int> QuickKeyToIndex = new Dictionary<string, int>();
+
         private WindowCloser _windowCloser;
         private List<AppWindowViewModel> _unfilteredWindowList;
         private ObservableCollection<AppWindowViewModel> _filteredWindowList;
@@ -65,6 +68,10 @@ namespace Switcheroo
 
         public MainWindow()
         {
+            for (int i = 0; i < QuickKeys.Length; ++i) {
+                QuickKeyToIndex[QuickKeys[i]] = i;
+            }
+
             InitializeComponent();
 
             SetUpKeyBindings();
@@ -132,6 +139,10 @@ namespace Switcheroo
                     Switch();
                 }
                 else if (args.Key == Key.LeftAlt && _altTabAutoSwitch)
+                {
+                    Switch();
+                }
+                else if (!_filterWindowMode && tb.Text.Length > 0)
                 {
                     Switch();
                 }
@@ -285,8 +296,13 @@ namespace Switcheroo
             _filteredWindowList = new ObservableCollection<AppWindowViewModel>(_unfilteredWindowList);
             _windowCloser = new WindowCloser();
 
+            int index = 0;
             foreach (var window in _unfilteredWindowList)
             {
+                if (index < QuickKeys.Length) {
+                    window.FormattedQuickKey = QuickKeys[index];
+                    index += 1;
+                }
                 window.FormattedTitle = new XamlHighlighter().Highlight(new[] {new StringPart(window.AppWindow.Title)});
                 window.FormattedProcessTitle =
                     new XamlHighlighter().Highlight(new[] {new StringPart(window.AppWindow.ProcessTitle)});
@@ -565,16 +581,12 @@ namespace Switcheroo
             var query = tb.Text;
 
             if (!_filterWindowMode) {
+                if (query == "") return;
 
-                switch (query) {
-                    case "": return;
-                    case "r": lb.SelectedIndex = 0; break;
-                    case "e": lb.SelectedIndex = 1; break;
-                    case "w": lb.SelectedIndex = 2; break;
-                    case "q": lb.SelectedIndex = 3; break;
+                if (QuickKeyToIndex.ContainsKey(query)) {
+                    lb.SelectedIndex = QuickKeyToIndex[query];
                 }
 
-                Switch();
                 return;
             }
 

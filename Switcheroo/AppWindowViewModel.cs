@@ -39,6 +39,17 @@ namespace Switcheroo
             get { return AppWindow.HWnd; }
         }
 
+        private string _formattedQuickKey;
+
+        public string FormattedQuickKey
+        {
+            get { return _formattedQuickKey; }
+            set {
+                _formattedQuickKey = value;
+                NotifyOfPropertyChange(() => FormattedQuickKey);
+            }
+        }
+
         private string _formattedTitle;
 
         public string FormattedTitle

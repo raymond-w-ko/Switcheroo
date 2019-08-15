@@ -121,6 +121,8 @@
                                                              IfTrue="{StaticResource FadeOutOpacity}" IfFalse="1.0" />
 
                                 <Color x:Key="FadeOutColor">Silver</Color>
+                                <local:BoolToColorConverter x:Key="QuickKeyColorConverter"
+                                                            IfTrue="{StaticResource FadeOutColor}" IfFalse="Red" />
                                 <local:BoolToColorConverter x:Key="TitleColorConverter"
                                                             IfTrue="{StaticResource FadeOutColor}" IfFalse="Black" />
                                 <local:BoolToColorConverter x:Key="ProcessColorConverter"
@@ -163,6 +165,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="22" />
+                                    <ColumnDefinition Width="32" />
                                     <ColumnDefinition Width="400" />
                                     <ColumnDefinition Width="106" />
                                 </Grid.ColumnDefinitions>
@@ -178,8 +181,15 @@
                                         </PriorityBinding>
                                     </Image.Source>
                                 </Image>
+                                <TextBlock local:FormattedTextAttribute.FormattedText="{Binding Path=FormattedQuickKey}"
+                                           Grid.Row="0" Grid.Column="1" Margin="4,0" TextAlignment="Center">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush
+                                            Color="{Binding IsBeingClosed, Converter={StaticResource QuickKeyColorConverter}, Mode=OneTime}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
                                 <TextBlock local:FormattedTextAttribute.FormattedText="{Binding Path=FormattedTitle}"
-                                           Grid.Row="0" Grid.Column="1" Margin="3,0">
+                                           Grid.Row="0" Grid.Column="2" Margin="3,0">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush
                                             Color="{Binding IsBeingClosed, Converter={StaticResource TitleColorConverter}, Mode=OneTime}" />
@@ -187,7 +197,7 @@
                                 </TextBlock>
                                 <TextBlock
                                     local:FormattedTextAttribute.FormattedText="{Binding Path=FormattedProcessTitle}"
-                                    Grid.Row="0" Grid.Column="2" Margin="0" TextAlignment="Right">
+                                    Grid.Row="0" Grid.Column="3" Margin="0" TextAlignment="Right">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush
                                             Color="{Binding IsBeingClosed, Converter={StaticResource ProcessColorConverter}, Mode=OneTime}" />
