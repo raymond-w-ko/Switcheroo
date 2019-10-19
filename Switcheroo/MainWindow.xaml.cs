@@ -46,7 +46,7 @@ namespace Switcheroo
 {
     public partial class MainWindow : Window
     {
-        private static readonly string[] QuickKeys = { "r", "e", "w", "q", "f", "d", "s", "a" };
+        private static readonly string[] QuickKeys = { "r", "e", "w", "q", "f", "d", "s", "a", "v", "c", "x", "z" };
         private Dictionary<string, int> QuickKeyToIndex = new Dictionary<string, int>();
 
         private WindowCloser _windowCloser;
